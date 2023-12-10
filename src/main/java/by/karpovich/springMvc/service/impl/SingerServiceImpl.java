@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SingerServiceImpl /*implements SingerService*/ {
+public class SingerServiceImpl {
 
     private final SingerRepository singerRepository;
     private final SingerMapper singerMapper;
@@ -78,6 +78,4 @@ public class SingerServiceImpl /*implements SingerService*/ {
             throw new DuplicateException(String.format("Singer with name = %s already exist", singerCreateDto.name()));
         }
     }
-
-
 }
