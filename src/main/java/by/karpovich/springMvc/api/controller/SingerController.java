@@ -9,7 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/singers")
 public class SingerController {
 
     private final SingerServiceImpl singerServiceImpl;
@@ -20,22 +23,32 @@ public class SingerController {
     }
 
 
-    @PostMapping("/addUser")
-    public void saveUser(@ModelAttribute("user") SingerCreateDto singer) {
+    @PostMapping
+    public void save(@RequestBody SingerCreateDto singer) {
         singerServiceImpl.save(singer);
     }
 
-    @GetMapping(value = "/singer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SingerDto> userForm(@PathVariable("id") Long id) {
-        SingerDto dto = singerServiceImpl.findById(id);
+    @PutMapping("/{id}")
+    public void update(@RequestBody SingerCreateDto singer, @PathVariable("id") Long singerId) {
+        singerServiceImpl.update(singer, singerId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Long singerId) {
+        singerServiceImpl.deleteById(singerId);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<SingerDto> findById(@PathVariable("id") Long singerId) {
+        SingerDto dto = singerServiceImpl.findById(singerId);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/singers/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SingerDto> findByName(@PathVariable("name") String name) {
-        SingerDto dto = singerServiceImpl.findByName(name);
+    @GetMapping
+    public ResponseEntity<List<SingerDto>> findAll() {
+        List<SingerDto> singersDto = singerServiceImpl.findAll();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(singersDto, HttpStatus.OK);
     }
 }

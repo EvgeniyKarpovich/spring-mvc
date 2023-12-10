@@ -6,8 +6,7 @@ import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.SingerMapper;
 import by.karpovich.springMvc.model.Singer;
-import by.karpovich.springMvc.repository.impl.SingerRepositoryImpl;
-import by.karpovich.springMvc.service.SingerService;
+import by.karpovich.springMvc.repository.SingerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +17,11 @@ import java.util.Optional;
 @Service
 public class SingerServiceImpl /*implements SingerService*/ {
 
-    private final SingerRepositoryImpl singerRepository;
+    private final SingerRepository singerRepository;
     private final SingerMapper singerMapper;
 
     @Autowired
-    public SingerServiceImpl(SingerRepositoryImpl singerRepository, SingerMapper singerMapper) {
+    public SingerServiceImpl(SingerRepository singerRepository, SingerMapper singerMapper) {
         this.singerRepository = singerRepository;
         this.singerMapper = singerMapper;
     }
@@ -36,17 +35,24 @@ public class SingerServiceImpl /*implements SingerService*/ {
         singerRepository.save(singerEntity);
     }
 
-    //    @Override
-    public void update(SingerCreateDto singer, Long aLong) {
+    @Transactional
+    public void update(SingerCreateDto singerCreateDto, Long singerId) {
+        validateAlreadyExists(singerCreateDto, singerId);
 
+        Singer singerEntity = singerMapper.mapFromDto(singerCreateDto);
+        singerEntity.setId(singerId);
+
+        singerRepository.save(singerEntity);
     }
 
-    //    @Override
+    @Transactional
     public boolean deleteById(Long id) {
+        if (singerRepository.findById(id).isPresent()) {
+            singerRepository.deleteById(id);
+        }
         return false;
     }
 
-    //    @Override
     @Transactional
     public SingerDto findById(Long singerId) {
         Singer entity = singerRepository.findById(singerId).orElseThrow(
@@ -54,17 +60,17 @@ public class SingerServiceImpl /*implements SingerService*/ {
         return singerMapper.mapFromEntity(entity);
     }
 
-    //    @Override
+    @Transactional
     public List<SingerDto> findAll() {
-        return null;
+        List<Singer> singerEntities = singerRepository.findAll();
+        return singerMapper.mapListDtoFromListEntity(singerEntities);
     }
 
-    @Transactional
-//    @Override
-    public SingerDto findByName(String singerName) {
-        Singer singer = singerRepository.findByName(singerName).get();
-        return singerMapper.mapFromEntity(singer);
-    }
+//    @Transactional
+//    public Singer findSingerByIdWhichWillReturnModel(Long id) {
+//        return singerRepository.findById(id).orElseThrow(
+//                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", id)));
+//    }
 
     private void validateAlreadyExists(SingerCreateDto singerCreateDto, Long id) {
         Optional<Singer> singerEntity = singerRepository.findByName(singerCreateDto.name());
@@ -72,4 +78,6 @@ public class SingerServiceImpl /*implements SingerService*/ {
             throw new DuplicateException(String.format("Singer with name = %s already exist", singerCreateDto.name()));
         }
     }
+
+
 }

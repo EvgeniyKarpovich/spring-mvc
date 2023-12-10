@@ -13,11 +13,13 @@ import java.util.List;
 
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, uses = SongMapper.class)
-public abstract class SingerMapper {
+public interface SingerMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "songs", ignore = true)
-    public abstract Singer mapFromDto(SingerCreateDto dto);
+    Singer mapFromDto(SingerCreateDto dto);
 
-    public abstract SingerDto mapFromEntity(Singer entity);
+    SingerDto mapFromEntity(Singer entity);
+
+    List<SingerDto> mapListDtoFromListEntity(List<Singer> entities);
 }

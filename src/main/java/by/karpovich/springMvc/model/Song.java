@@ -27,7 +27,23 @@ public class Song extends BaseEntity {
         this.singer = singer;
     }
 
-//    public Song(Long id, String name, Singer singer, List<Author> authors) {
+    public Singer getSinger() {
+        return singer;
+    }
+
+    public void setSinger(Singer singer) {
+        this.singer = singer;
+    }
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    //    public Song(Long id, String name, Singer singer, List<Author> authors) {
 //        super(id, name);
 //        this.singer = singer;
 //        this.authors = authors;

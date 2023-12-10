@@ -14,6 +14,14 @@ public class Author extends BaseEntity {
     @ManyToMany(mappedBy = "authors")
     private List<Song> songs = new ArrayList<>();
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
     public Author() {
     }
 
