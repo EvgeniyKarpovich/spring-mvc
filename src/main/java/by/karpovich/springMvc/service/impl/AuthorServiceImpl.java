@@ -6,6 +6,7 @@ import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.AuthorMapper;
 import by.karpovich.springMvc.model.Author;
+import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,12 @@ public class AuthorServiceImpl {
     public List<AuthorDto> findAll() {
         List<Author> AuthorEntities = authorRepository.findAll();
         return authorMapper.mapListDtoFromListEntity(AuthorEntities);
+    }
+
+    @Transactional
+    public Author findAuthorByIdWhichWillReturnModel(Long id) {
+        return authorRepository.findById(id).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Author with id = %s not found", id)));
     }
 
     private void validateAlreadyExists(AuthorCreateDto authorCreateDto, Long id) {

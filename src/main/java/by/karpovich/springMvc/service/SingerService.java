@@ -2,7 +2,6 @@ package by.karpovich.springMvc.service;
 
 import by.karpovich.springMvc.api.dto.SingerCreateDto;
 import by.karpovich.springMvc.api.dto.SingerDto;
-import by.karpovich.springMvc.model.Singer;
 
 import java.util.List;
 

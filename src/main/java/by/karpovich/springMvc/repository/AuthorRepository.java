@@ -1,7 +1,6 @@
 package by.karpovich.springMvc.repository;
 
 import by.karpovich.springMvc.model.Author;
-import by.karpovich.springMvc.model.Singer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

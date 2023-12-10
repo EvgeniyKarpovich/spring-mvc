@@ -2,12 +2,10 @@ package by.karpovich.springMvc.service.impl;
 
 import by.karpovich.springMvc.api.dto.SongCreateDto;
 import by.karpovich.springMvc.api.dto.SongDto;
-import by.karpovich.springMvc.api.dto.SongDto;
-import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.SongMapper;
-import by.karpovich.springMvc.model.Song;
+import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +72,13 @@ public class SongServiceImpl {
         List<Song> SongEntities = songRepository.findAll();
         return songMapper.mapListDtoFromListEntity(SongEntities);
     }
+
+    @Transactional
+    public Song findSongByIdWhichWillReturnModel(Long id) {
+        return songRepository.findById(id).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Song with id = %s not found", id)));
+    }
+
 
     private void validateAlreadyExists(SongCreateDto songCreateDto, Long id) {
         Optional<Song> songEntity = songRepository.findByName(songCreateDto.name());

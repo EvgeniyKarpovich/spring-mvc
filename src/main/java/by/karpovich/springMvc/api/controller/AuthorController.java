@@ -21,7 +21,7 @@ public class AuthorController {
         this.authorServiceImpl = authorServiceImpl;
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public void save(@RequestBody AuthorCreateDto authorCreateDto) {
         authorServiceImpl.save(authorCreateDto);
     }

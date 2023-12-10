@@ -56,7 +56,7 @@ public class SingerServiceImpl /*implements SingerService*/ {
     @Transactional
     public SingerDto findById(Long singerId) {
         Singer entity = singerRepository.findById(singerId).orElseThrow(
-                () -> new NotFoundEntityException(String.format("Album with id = %s not found", singerId)));
+                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", singerId)));
         return singerMapper.mapFromEntity(entity);
     }
 
@@ -66,11 +66,11 @@ public class SingerServiceImpl /*implements SingerService*/ {
         return singerMapper.mapListDtoFromListEntity(singerEntities);
     }
 
-//    @Transactional
-//    public Singer findSingerByIdWhichWillReturnModel(Long id) {
-//        return singerRepository.findById(id).orElseThrow(
-//                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", id)));
-//    }
+    @Transactional
+    public Singer findSingerByIdWhichWillReturnModel(Long id) {
+        return singerRepository.findById(id).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", id)));
+    }
 
     private void validateAlreadyExists(SingerCreateDto singerCreateDto, Long id) {
         Optional<Singer> singerEntity = singerRepository.findByName(singerCreateDto.name());
