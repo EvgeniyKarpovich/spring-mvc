@@ -1,9 +1,9 @@
 package by.karpovich.springMvc.api.controller;
 
-import by.karpovich.springMvc.api.dto.AuthorCreateDto;
-import by.karpovich.springMvc.api.dto.AuthorDto;
+import by.karpovich.springMvc.api.dto.SingerCreateDto;
+import by.karpovich.springMvc.api.dto.SingerDto;
 import by.karpovich.springMvc.api.dto.SongDto;
-import by.karpovich.springMvc.service.impl.AuthorServiceImpl;
+import by.karpovich.springMvc.service.impl.SingerServiceImpl;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,19 +31,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @WebAppConfiguration()
-class AuthorControllerTest {
+class SingerControllerTest {
 
-    private final Long AUTHOR_ID = 1L;
+    private final Long SINGER_ID = 1L;
     @Mock
-    private AuthorServiceImpl authorService;
+    private SingerServiceImpl singerService;
     @InjectMocks
-    private AuthorController authorController;
+    private SingerController singerController;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(authorController)
+        mockMvc = MockMvcBuilders.standaloneSetup(singerController)
                 .build();
         objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -51,62 +51,62 @@ class AuthorControllerTest {
 
     @Test
     void save() throws Exception {
-        doNothing().when(authorService).save(any(AuthorCreateDto.class));
+        doNothing().when(singerService).save(any(SingerCreateDto.class));
 
-        mockMvc.perform(post("/authors")
+        mockMvc.perform(post("/singers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(generateAuthorCreateDto())))
+                        .content(objectMapper.writeValueAsString(generateSingerCreatedDto())))
                 .andExpect(status().isOk());
     }
 
     @Test
     void update() throws Exception {
-        doNothing().when(authorService).update(any(AuthorCreateDto.class), any(Long.class));
+        doNothing().when(singerService).update(any(SingerCreateDto.class), any(Long.class));
 
-        mockMvc.perform(put("/authors/{id}", AUTHOR_ID)
+        mockMvc.perform(put("/singers/{id}", SINGER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(generateAuthorCreateDto())))
+                        .content(objectMapper.writeValueAsString(generateSingerCreatedDto())))
                 .andExpect(status().isOk());
     }
 
     @Test
     void delete() throws Exception {
-        when(authorService.deleteById(AUTHOR_ID)).thenReturn(true);
+        when(singerService.deleteById(SINGER_ID)).thenReturn(true);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/authors/{id}", AUTHOR_ID))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/singers/{id}", SINGER_ID))
                 .andExpect(status().isOk());
     }
 
     @Test
     void findById() throws Exception {
-        when(authorService.findById(AUTHOR_ID)).thenReturn(generateAuthorDto());
+        when(singerService.findById(SINGER_ID)).thenReturn(generateSingerDto());
 
-        mockMvc.perform(get("/authors/{id}", AUTHOR_ID))
+        mockMvc.perform(get("/singers/{id}", SINGER_ID))
                 .andExpect(status().isOk());
     }
 
     @Test
     void findAll() throws Exception {
-        List<AuthorDto> authorList = Arrays.asList(generateAuthorDto(), generateAuthorDto2());
+        List<SingerDto> authorList = Arrays.asList(generateSingerDto(), generateSingerDto2());
 
-        when(authorService.findAll()).thenReturn(authorList);
+        when(singerService.findAll()).thenReturn(authorList);
 
-        mockMvc.perform(get("/authors"))
+        mockMvc.perform(get("/singers"))
                 .andExpect(status().isOk());
     }
 
-
-    private AuthorDto generateAuthorDto() {
-        List<SongDto> songs = new ArrayList<>();
-        return new AuthorDto(1L, "Test", songs);
+    private SingerCreateDto generateSingerCreatedDto() {
+        return new SingerCreateDto("Test");
     }
 
-    private AuthorDto generateAuthorDto2() {
+
+    private SingerDto generateSingerDto() {
         List<SongDto> songs = new ArrayList<>();
-        return new AuthorDto(2L, "Test2", songs);
+        return new SingerDto(1L, "Test", songs);
     }
 
-    private AuthorCreateDto generateAuthorCreateDto() {
-        return  new AuthorCreateDto("Test");
+    private SingerDto generateSingerDto2() {
+        List<SongDto> songs = new ArrayList<>();
+        return new SingerDto(2L, "Test", songs);
     }
 }

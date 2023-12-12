@@ -15,11 +15,4 @@ public interface SongRepository extends JpaRepository<Song, Long> {
             select s from Song s where s.name = :songName
             """)
     Optional<Song> findByName(@Param("songName") String songName);
-
-//    public List<Song> findBySingerId(Long singerId) {
-//        return sessionFactory.getCurrentSession()
-//                .createQuery("select s from Song s where s.singer.id = :singerId", Song.class)
-//                .setParameter("singerId", singerId)
-//                .getResultList();
-//    }
 }
