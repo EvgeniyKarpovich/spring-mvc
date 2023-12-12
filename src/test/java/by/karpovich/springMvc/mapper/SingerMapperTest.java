@@ -1,9 +1,7 @@
 package by.karpovich.springMvc.mapper;
 
-import by.karpovich.springMvc.api.dto.AuthorCreateDto;
 import by.karpovich.springMvc.api.dto.SingerCreateDto;
 import by.karpovich.springMvc.api.dto.SingerDto;
-import by.karpovich.springMvc.model.Author;
 import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.model.Song;
 import org.junit.jupiter.api.Test;

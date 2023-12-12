@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, uses = SongMapper.class)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface SingerMapper {
 
     @Mapping(target = "id", ignore = true)

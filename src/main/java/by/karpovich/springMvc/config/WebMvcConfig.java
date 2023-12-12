@@ -34,13 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return source;
     }
 
-//    @Override
-//    public Validator getValidator() {
-//        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-//        validator.setValidationMessageSource(messageSource());
-//        return validator;
-//    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry

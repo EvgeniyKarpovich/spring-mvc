@@ -14,9 +14,10 @@
         <maven-compiler-plugin.version>3.10.0</maven-compiler-plugin.version>
         <java.version>17</java.version>
 
-        <spring.version>6.0.9</spring.version>
+        <spring.version>6.1.0</spring.version>
         <spring-data-jpa.version>3.2.0</spring-data-jpa.version>
         <hibernate.version>6.2.2.Final</hibernate.version>
+
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
 
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -51,7 +52,6 @@
             <version>${jakarta.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -175,14 +175,10 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <!--            <exclude>by/karpovich/exception/**</exclude>-->
-                        <!--            <exclude>by/karpovich/model/**</exclude>-->
-                        <!--            <exclude>by/karpovich/servlet/dto/**</exclude>-->
-                        <!--            <exclude>by/karpovich/sql/**</exclude>-->
-                        <!--            <exclude>by/karpovich/util/**</exclude>-->
-                        <!--            <exclude>by/karpovich/repository</exclude>-->
-                        <!--            <exclude>by/karpovich/repository/mapper</exclude>-->
-                        <!--            <exclude>by/karpovich/service</exclude>-->
+                        <exclude>by/karpovich/exception/**</exclude>
+                        <exclude>by/karpovich/model/**</exclude>
+                        <exclude>by/karpovich/api/dto/**</exclude>
+                        <exclude>by/karpovich/config/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

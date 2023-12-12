@@ -66,15 +66,14 @@ public class SongServiceImpl {
     }
 
     @Transactional
-    public Song findSongByIdWhichWillReturnModel(Long id) {
-        return songRepository.findById(id).orElseThrow(
-                () -> new NotFoundEntityException(String.format("Song with id = %s not found", id)));
+    public Song findSongByIdWhichWillReturnModel(Long songId) {
+        return songRepository.findById(songId).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Song with id = %s not found", songId)));
     }
 
-
-    private void validateAlreadyExists(SongCreateDto songCreateDto, Long id) {
+    private void validateAlreadyExists(SongCreateDto songCreateDto, Long songId) {
         Optional<Song> songEntity = songRepository.findByName(songCreateDto.name());
-        if (songEntity.isPresent() && !songEntity.get().getId().equals(id)) {
+        if (songEntity.isPresent() && !songEntity.get().getId().equals(songId)) {
             throw new DuplicateException(String.format("Song with name = %s already exist", songCreateDto.name()));
         }
     }

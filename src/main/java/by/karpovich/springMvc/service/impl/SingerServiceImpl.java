@@ -46,9 +46,9 @@ public class SingerServiceImpl {
     }
 
     @Transactional
-    public boolean deleteById(Long id) {
-        if (singerRepository.findById(id).isPresent()) {
-            singerRepository.deleteById(id);
+    public boolean deleteById(Long singerId) {
+        if (singerRepository.findById(singerId).isPresent()) {
+            singerRepository.deleteById(singerId);
         }
         return false;
     }
@@ -67,14 +67,14 @@ public class SingerServiceImpl {
     }
 
     @Transactional
-    public Singer findSingerByIdWhichWillReturnModel(Long id) {
-        return singerRepository.findById(id).orElseThrow(
-                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", id)));
+    public Singer findSingerByIdWhichWillReturnModel(Long singerId) {
+        return singerRepository.findById(singerId).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Singer with id = %s not found", singerId)));
     }
 
-    private void validateAlreadyExists(SingerCreateDto singerCreateDto, Long id) {
+    private void validateAlreadyExists(SingerCreateDto singerCreateDto, Long singerId) {
         Optional<Singer> singerEntity = singerRepository.findByName(singerCreateDto.name());
-        if (singerEntity.isPresent() && !singerEntity.get().getId().equals(id)) {
+        if (singerEntity.isPresent() && !singerEntity.get().getId().equals(singerId)) {
             throw new DuplicateException(String.format("Singer with name = %s already exist", singerCreateDto.name()));
         }
     }

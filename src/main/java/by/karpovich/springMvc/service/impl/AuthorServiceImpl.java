@@ -6,7 +6,6 @@ import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.AuthorMapper;
 import by.karpovich.springMvc.model.Author;
-import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ public class AuthorServiceImpl {
         this.authorMapper = authorMapper;
     }
 
-
     @Transactional
     public void save(AuthorCreateDto authorCreateDto) {
         validateAlreadyExists(authorCreateDto, null);
@@ -37,19 +35,19 @@ public class AuthorServiceImpl {
     }
 
     @Transactional
-    public void update(AuthorCreateDto authorCreateDto, Long AuthorId) {
-        validateAlreadyExists(authorCreateDto, AuthorId);
+    public void update(AuthorCreateDto authorCreateDto, Long authorId) {
+        validateAlreadyExists(authorCreateDto, authorId);
 
         Author authorEntity = authorMapper.mapFromDto(authorCreateDto);
-        authorEntity.setId(AuthorId);
+        authorEntity.setId(authorId);
 
         authorRepository.save(authorEntity);
     }
 
     @Transactional
-    public boolean deleteById(Long id) {
-        if (authorRepository.findById(id).isPresent()) {
-            authorRepository.deleteById(id);
+    public boolean deleteById(Long authorId) {
+        if (authorRepository.findById(authorId).isPresent()) {
+            authorRepository.deleteById(authorId);
         }
         return false;
     }
@@ -68,14 +66,14 @@ public class AuthorServiceImpl {
     }
 
     @Transactional
-    public Author findAuthorByIdWhichWillReturnModel(Long id) {
-        return authorRepository.findById(id).orElseThrow(
-                () -> new NotFoundEntityException(String.format("Author with id = %s not found", id)));
+    public Author findAuthorByIdWhichWillReturnModel(Long authorId) {
+        return authorRepository.findById(authorId).orElseThrow(
+                () -> new NotFoundEntityException(String.format("Author with id = %s not found", authorId)));
     }
 
-    private void validateAlreadyExists(AuthorCreateDto authorCreateDto, Long id) {
+    private void validateAlreadyExists(AuthorCreateDto authorCreateDto, Long authorId) {
         Optional<Author> authorEntity = authorRepository.findByName(authorCreateDto.name());
-        if (authorEntity.isPresent() && !authorEntity.get().getId().equals(id)) {
+        if (authorEntity.isPresent() && !authorEntity.get().getId().equals(authorId)) {
             throw new DuplicateException(String.format("Author with name = %s already exist", authorCreateDto.name()));
         }
     }

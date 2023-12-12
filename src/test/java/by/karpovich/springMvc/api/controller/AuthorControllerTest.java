@@ -107,6 +107,6 @@ class AuthorControllerTest {
     }
 
     private AuthorCreateDto generateAuthorCreateDto() {
-        return  new AuthorCreateDto("Test");
+        return new AuthorCreateDto("Test");
     }
 }
