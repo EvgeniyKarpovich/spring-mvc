@@ -1,54 +1,44 @@
 package by.karpovich.springMvc.repository;
 
-import by.karpovich.springMvc.config.PersistenceJPAConfig;
-import by.karpovich.springMvc.config.WebMvcConfig;
+import by.karpovich.springMvc.config.PersistenceConfigForTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static by.karpovich.springMvc.config.PersistenceConfigForTest.container;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {PersistenceJPAConfig.class, WebMvcConfig.class})
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Testcontainers
-class SingerRepositoryTest {
+@ContextConfiguration(classes = {PersistenceConfigForTest.class, SingerRepository.class, AuthorRepository.class, SongRepository.class})
+public class SingerRepositoryTest {
+
+    private final SingerRepository singerRepository;
+    private final AuthorRepository authorRepository;
+    private final SongRepository songRepository;
 
     @Autowired
-    private SingerRepository singerRepository;
-//    @Autowired
-//    private ApplicationContext applicationContext;
-
-    //    @ClassRule
-    public static final PostgreSQLContainer<?> container =
-            new PostgreSQLContainer<>("postgres:16")
-                    .withUsername("postgres")
-                    .withDatabaseName("postgres")
-                    .withPassword("postgres")
-                    .withInitScript("db-migration.SQL");
-
-    @AfterAll
-    static void afterAll() {
-        container.stop();
+    public SingerRepositoryTest(SingerRepository singerRepository, AuthorRepository authorRepository, SongRepository songRepository) {
+        this.singerRepository = singerRepository;
+        this.authorRepository = authorRepository;
+        this.songRepository = songRepository;
     }
 
     @BeforeAll
-    static void beforeAll() {
+    static void setup() {
         container.start();
     }
 
-    @Test
-    void findAll() {
-//        List<Singer> all = singerRepository.findAll();
-//
-//        assertEquals(3, all.size());
-//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(PersistenceJPAConfig.class);
-//        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-//        System.out.println(context.getBeanDefinitionNames());
+    @AfterAll
+    static void close() {
+        container.stop();
     }
+
+    @Test
+    void save() {
+
+    }
+
 }

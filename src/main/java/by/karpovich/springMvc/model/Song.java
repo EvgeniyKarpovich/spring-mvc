@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "songs")
 public class Song extends BaseEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "singer_id")
     private Singer singer;
 

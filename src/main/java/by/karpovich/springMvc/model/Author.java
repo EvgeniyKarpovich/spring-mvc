@@ -1,6 +1,7 @@
 package by.karpovich.springMvc.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Table(name = "authors")
 public class Author extends BaseEntity {
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private List<Song> songs = new ArrayList<>();
 
     public List<Song> getSongs() {
