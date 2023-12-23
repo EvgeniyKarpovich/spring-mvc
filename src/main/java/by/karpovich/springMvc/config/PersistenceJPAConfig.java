@@ -1,5 +1,6 @@
 package by.karpovich.springMvc.config;
 
+import by.karpovich.springMvc.repository.SingerRepository;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
