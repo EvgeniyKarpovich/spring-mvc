@@ -9,13 +9,14 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, componentModel = "spring")
 public interface SingerMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "songs", ignore = true)
     Singer mapFromDto(SingerCreateDto dto);
 
+    @Mapping(target = "songs", ignore = true)
     SingerDto mapFromEntity(Singer entity);
 
     SingerCreateDto mapSingerCreateDtoFromEntity(Singer entity);

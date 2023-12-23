@@ -1,7 +1,7 @@
 package by.karpovich.springMvc.repository;
 
 import by.karpovich.springMvc.config.PersistenceConfigForTest;
-import by.karpovich.springMvc.model.Singer;
+import by.karpovich.springMvc.model.Author;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {PersistenceConfigForTest.class, SingerRepository.class})
-public class SingerRepositoryTest {
+@ContextConfiguration(classes = {PersistenceConfigForTest.class, AuthorRepository.class})
+class AuthorRepositoryTest {
 
-    private final SingerRepository singerRepository;
+    private final AuthorRepository authorRepository;
 
     @Autowired
-    public SingerRepositoryTest(SingerRepository singerRepository) {
-        this.singerRepository = singerRepository;
+    public AuthorRepositoryTest(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     @BeforeAll
@@ -39,39 +39,41 @@ public class SingerRepositoryTest {
 
     @Test
     void save() {
-        Singer result = singerRepository.save(generateSingerEntity());
+        Author result = authorRepository.save(generateAuthorEntity());
 
         assertNotNull(result.getId());
     }
 
+
     @Test
     void findById() {
-        Singer actualResult = singerRepository.findById(1L).get();
+        Author result = authorRepository.findById(1L).get();
 
-        assertEquals(actualResult.getId(), 1L);
-        assertEquals(actualResult.getName(), "50 CENT");
+        assertEquals(result.getId(), 1L);
+        assertEquals(result.getName(), "Evgeniy Karpovich");
     }
 
     @Test
     void findAll() {
-        List<Singer> all = singerRepository.findAll();
+        List<Author> result = authorRepository.findAll();
 
-        assertEquals(3, all.size());
+        assertEquals(3, result.size());
     }
 
     @Test
     void update() {
         String updateName = "update name";
-        Singer entity = singerRepository.findById(3L).get();
+        Author entity = authorRepository.findById(3L).get();
         entity.setName(updateName);
-        singerRepository.save(entity);
 
-        Singer result = singerRepository.findById(entity.getId()).get();
+        authorRepository.save(entity);
+
+        Author result = authorRepository.findById(entity.getId()).get();
 
         assertEquals(result.getName(), updateName);
     }
 
-    private Singer generateSingerEntity() {
-        return new Singer("Singer test");
+    private Author generateAuthorEntity() {
+        return new Author("Author test");
     }
 }

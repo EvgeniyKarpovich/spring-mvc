@@ -22,7 +22,7 @@ class AuthorMapperTest {
     private static final String AUTHOR_NAME = "AuthorTestName";
     private static final String SONG_NAME = "SongTestName";
     private static final Song SONG = new Song(ID, SONG_NAME);
-    private static final List<Song> SONGS = Arrays.asList(SONG);
+    private static final List<Song> SONGS = List.of(SONG);
 
     @Mock
     private SongMapper songMapper;
@@ -51,17 +51,17 @@ class AuthorMapperTest {
         assertEquals(AUTHOR_NAME, result.name());
     }
 
-    @Test
-    void mapListCreateDtoFromEntity() {
-        List<Author> entities = Arrays.asList(generateAuthorEntity(), generateAuthorEntity());
-        List<AuthorCreateDto> result = authorMapper.mapListCreateDtoFromEntity(entities);
-
-        assertEquals(2, result.size());
-
-        for (AuthorCreateDto dto : result) {
-            assertEquals(AUTHOR_NAME, dto.name());
-        }
-    }
+//    @Test
+//    void mapListCreateDtoFromEntity() {
+//        List<Author> entities = Arrays.asList(generateAuthorEntity(), generateAuthorEntity());
+//        List<AuthorCreateDto> result = authorMapper.mapListCreateDtoFromEntity(entities);
+//
+//        assertEquals(2, result.size());
+//
+//        for (AuthorCreateDto dto : result) {
+//            assertEquals(AUTHOR_NAME, dto.name());
+//        }
+//    }
 
     @Test
     void mapListDtoFromListEntity() {

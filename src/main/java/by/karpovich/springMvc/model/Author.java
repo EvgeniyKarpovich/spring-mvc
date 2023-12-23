@@ -26,6 +26,10 @@ public class Author extends BaseEntity {
     public Author() {
     }
 
+    public Author(String name) {
+        super(name);
+    }
+
     public Author(Long id, String name) {
         super(id, name);
     }

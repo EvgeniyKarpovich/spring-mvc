@@ -14,6 +14,10 @@ public class BaseEntity {
     public BaseEntity() {
     }
 
+    public BaseEntity(String name) {
+        this.name = name;
+    }
+
     public BaseEntity(Long id) {
         this.id = id;
     }

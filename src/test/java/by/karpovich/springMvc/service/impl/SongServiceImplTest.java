@@ -5,6 +5,7 @@ import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.SongMapper;
+import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.SongRepository;
 import org.junit.jupiter.api.Test;
@@ -28,18 +29,23 @@ class SongServiceImplTest {
     private SongMapper songMapper;
     @Mock
     private SongRepository songRepository;
+    @Mock
+    private SingerServiceImpl singerService;
     @InjectMocks
     private SongServiceImpl songService;
+
     private static final Long ID = 1L;
 
     @Test
     void save() {
         Song mapped = mock(Song.class);
         Song saved = mock(Song.class);
+        Singer singer = mock(Singer.class);
 
         SongCreateDto startDto = mock(SongCreateDto.class);
 
         when(songMapper.mapFromDto(any(SongCreateDto.class))).thenReturn(mapped);
+        when(singerService.findSingerByIdWhichWillReturnModel(anyLong())).thenReturn(singer);
         when(songRepository.save(any(Song.class))).thenReturn(saved);
 
         songService.save(startDto);

@@ -5,33 +5,50 @@ import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.SongMapper;
+import by.karpovich.springMvc.model.Author;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SongServiceImpl {
-
     private final SongRepository songRepository;
     private final SongMapper songMapper;
+    private final SingerServiceImpl singerService;
+    private final AuthorServiceImpl authorService;
 
     @Autowired
-    public SongServiceImpl(SongRepository songRepository, SongMapper songMapper) {
+    public SongServiceImpl(SongRepository songRepository, SongMapper songMapper, SingerServiceImpl singerService, AuthorServiceImpl authorService) {
         this.songRepository = songRepository;
         this.songMapper = songMapper;
+        this.singerService = singerService;
+        this.authorService = authorService;
     }
+
 
     @Transactional
     public void save(SongCreateDto songCreateDto) {
         validateAlreadyExists(songCreateDto, null);
 
         Song songEntity = songMapper.mapFromDto(songCreateDto);
+        songEntity.setSinger(singerService.findSingerByIdWhichWillReturnModel(songCreateDto.singerId()));
+        songEntity.setAuthors(getAuthors(songCreateDto));
         songRepository.save(songEntity);
+    }
+
+    private List<Author> getAuthors(SongCreateDto songCreateDto) {
+        List<Author> authors = new ArrayList<>();
+        for (Long authorId : songCreateDto.authorsId()) {
+            Author author = authorService.findAuthorByIdWhichWillReturnModel(authorId);
+            authors.add(author);
+        }
+        return authors;
     }
 
     @Transactional
@@ -40,6 +57,8 @@ public class SongServiceImpl {
 
         Song songEntity = songMapper.mapFromDto(songCreateDto);
         songEntity.setId(songId);
+        songEntity.setSinger(singerService.findSingerByIdWhichWillReturnModel(songCreateDto.singerId()));
+        songEntity.setAuthors(getAuthors(songCreateDto));
 
         songRepository.save(songEntity);
     }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +48,7 @@ public class GlobalExceptionHandler {
 
     @SuppressWarnings("unchecked")
     private List<String> composeValidationErrors(List<ObjectError> objectErrors) {
-        return objectErrors != null && !objectErrors.isEmpty() ? (List) objectErrors.stream().map((objectError) -> {
+        return objectErrors != null && !objectErrors.isEmpty() ? objectErrors.stream().map((objectError) -> {
             return objectErrors instanceof FieldError ? ((FieldError) objectError).getField() + " " + ((FieldError) objectErrors).getDefaultMessage() : objectError.getDefaultMessage();
         }).collect(Collectors.toList()) : Collections.emptyList();
     }

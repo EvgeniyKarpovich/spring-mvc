@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "songs")
 public class Song extends BaseEntity {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "singer_id")
     private Singer singer;
 
@@ -25,6 +25,12 @@ public class Song extends BaseEntity {
     public Song(Long id, String name, Singer singer) {
         super(id, name);
         this.singer = singer;
+    }
+
+    public Song(String name, Singer singer, List<Author> authors) {
+        super(name);
+        this.singer = singer;
+        this.authors = authors;
     }
 
     public Song(Long id, String name) {
@@ -47,22 +53,9 @@ public class Song extends BaseEntity {
         this.authors = authors;
     }
 
-    //    public Song(Long id, String name, Singer singer, List<Author> authors) {
-//        super(id, name);
-//        this.singer = singer;
-//        this.authors = authors;
-//    }
-//
-//    public Song(Singer singer) {
-//        this.singer = singer;
-//    }
-//
-//    public Song(List<Author> authors) {
-//        this.authors = authors;
-//    }
-//
-//    public Song(Singer singer, List<Author> authors) {
-//        this.singer = singer;
-//        this.authors = authors;
-//    }
+    public Song(Long id, String name, Singer singer, List<Author> authors) {
+        super(id, name);
+        this.singer = singer;
+        this.authors = authors;
+    }
 }

@@ -9,18 +9,20 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public abstract class AuthorMapper {
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, componentModel = "spring", uses = SongMapper.class)
+public interface AuthorMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "songs", ignore = true)
-    public abstract Author mapFromDto(AuthorCreateDto dto);
+    Author mapFromDto(AuthorCreateDto dto);
 
-    public abstract AuthorDto mapFromEntity(Author entity);
+    @Mapping(target = "songs", ignore = true)
+    AuthorDto mapFromEntity(Author entity);
 
-    public abstract AuthorCreateDto mapCreateDtoFromEntity(Author entity);
+    AuthorCreateDto mapCreateDtoFromEntity(Author entity);
 
-    public abstract List<AuthorCreateDto> mapListCreateDtoFromEntity(List<Author> authorsEntity);
+    //    @Mapping(target = "songs")
+    List<AuthorCreateDto> mapListCreateDtoFromEntity(List<Author> authorsEntity);
 
-    public abstract List<AuthorDto> mapListDtoFromListEntity(List<Author> entities);
+    List<AuthorDto> mapListDtoFromListEntity(List<Author> entities);
 }

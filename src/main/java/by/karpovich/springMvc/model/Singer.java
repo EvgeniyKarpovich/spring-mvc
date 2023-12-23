@@ -11,10 +11,14 @@ import java.util.List;
 @Entity
 @Table(name = "singers")
 public class Singer extends BaseEntity {
-    @OneToMany(mappedBy = "singer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "singer", fetch = FetchType.LAZY)
     private List<Song> songs = new ArrayList<>();
 
     public Singer() {
+    }
+
+    public Singer(String name) {
+        super(name);
     }
 
     public Singer(Long id, String name) {
