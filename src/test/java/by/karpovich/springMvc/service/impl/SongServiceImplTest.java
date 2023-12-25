@@ -1,10 +1,15 @@
 package by.karpovich.springMvc.service.impl;
 
+import by.karpovich.springMvc.api.dto.AuthorCreateDto;
+import by.karpovich.springMvc.api.dto.SingerCreateDto;
 import by.karpovich.springMvc.api.dto.SongCreateDto;
 import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
+import by.karpovich.springMvc.mapper.AuthorMapper;
+import by.karpovich.springMvc.mapper.SingerMapper;
 import by.karpovich.springMvc.mapper.SongMapper;
+import by.karpovich.springMvc.model.Author;
 import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.SongRepository;
@@ -31,6 +36,12 @@ class SongServiceImplTest {
     private SongRepository songRepository;
     @Mock
     private SingerServiceImpl singerService;
+    @Mock
+    private AuthorMapper authorMapper;
+    @Mock
+    private AuthorServiceImpl authorService;
+    @Mock
+    private SingerMapper singerMapper;
     @InjectMocks
     private SongServiceImpl songService;
 
@@ -40,12 +51,11 @@ class SongServiceImplTest {
     void save() {
         Song mapped = mock(Song.class);
         Song saved = mock(Song.class);
-        Singer singer = mock(Singer.class);
+
 
         SongCreateDto startDto = mock(SongCreateDto.class);
 
         when(songMapper.mapFromDto(any(SongCreateDto.class))).thenReturn(mapped);
-        when(singerService.findSingerByIdWhichWillReturnModel(anyLong())).thenReturn(singer);
         when(songRepository.save(any(Song.class))).thenReturn(saved);
 
         songService.save(startDto);
@@ -79,13 +89,39 @@ class SongServiceImplTest {
     @Test
     void findById() {
         Song entity = mock(Song.class);
+        Singer singer = mock(Singer.class);
+        Author author = mock(Author.class);
+        List<Author> authorsList = new ArrayList<>();
+        authorsList.add(author);
+
         SongDto dto = mock(SongDto.class);
+        AuthorCreateDto authorDto = mock(AuthorCreateDto.class);
+        List<AuthorCreateDto> authorDtos = new ArrayList<>();
+        authorDtos.add(authorDto);
+        SingerCreateDto singerDto = mock(SingerCreateDto.class);
 
         when(songRepository.findById(anyLong())).thenReturn(Optional.of(entity));
+
+        when(entity.getAuthors()).thenReturn(authorsList);
+        when(entity.getSinger()).thenReturn(singer);
+
+        when(authorService.findAuthorByIdWhichWillReturnModel(anyLong())).thenReturn(author);
+        when(singerService.findSingerByIdWhichWillReturnModel(anyLong())).thenReturn(singer);
+
         when(songMapper.mapFromEntity(any(Song.class))).thenReturn(dto);
+        when(authorMapper.mapListCreateDtoFromEntity(anyList())).thenReturn(authorDtos);
+        when(singerMapper.mapSingerCreateDtoFromEntity(any(Singer.class))).thenReturn(singerDto);
 
         SongDto result = songService.findById(ID);
+
         assertNotNull(result);
+
+        verify(songRepository).findById(ID);
+        verify(songMapper).mapFromEntity(entity);
+        verify(authorService).findAuthorByIdWhichWillReturnModel(author.getId());
+        verify(singerService).findSingerByIdWhichWillReturnModel(singer.getId());
+        verify(authorMapper).mapListCreateDtoFromEntity(authorsList);
+        verify(singerMapper).mapSingerCreateDtoFromEntity(singer);
     }
 
     @Test

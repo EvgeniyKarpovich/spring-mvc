@@ -4,8 +4,11 @@ import by.karpovich.springMvc.api.dto.SongCreateDto;
 import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
+import by.karpovich.springMvc.mapper.AuthorMapper;
+import by.karpovich.springMvc.mapper.SingerMapper;
 import by.karpovich.springMvc.mapper.SongMapper;
 import by.karpovich.springMvc.model.Author;
+import by.karpovich.springMvc.model.Singer;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +25,17 @@ public class SongServiceImpl {
     private final SongMapper songMapper;
     private final SingerServiceImpl singerService;
     private final AuthorServiceImpl authorService;
+    private final AuthorMapper authorMapper;
+    private final SingerMapper singerMapper;
 
     @Autowired
-    public SongServiceImpl(SongRepository songRepository, SongMapper songMapper, SingerServiceImpl singerService, AuthorServiceImpl authorService) {
+    public SongServiceImpl(SongRepository songRepository, SongMapper songMapper, SingerServiceImpl singerService, AuthorServiceImpl authorService, AuthorMapper authorMapper, SingerMapper singerMapper) {
         this.songRepository = songRepository;
         this.songMapper = songMapper;
         this.singerService = singerService;
         this.authorService = authorService;
+        this.authorMapper = authorMapper;
+        this.singerMapper = singerMapper;
     }
 
 
@@ -73,9 +80,22 @@ public class SongServiceImpl {
 
     @Transactional
     public SongDto findById(Long songId) {
-        Song entity = songRepository.findById(songId).orElseThrow(
+        Song songEntity = songRepository.findById(songId).orElseThrow(
                 () -> new NotFoundEntityException(String.format("Song with id = %s not found", songId)));
-        return songMapper.mapFromEntity(entity);
+
+        List<Author> authors = new ArrayList<>();
+
+        for (Author author : songEntity.getAuthors()) {
+          authors.add(  authorService.findAuthorByIdWhichWillReturnModel(author.getId()));
+        }
+
+        SongDto songDto = songMapper.mapFromEntity(songEntity);
+        songDto.setAuthors(authorMapper.mapListCreateDtoFromEntity(authors));
+
+        Singer singer = singerService.findSingerByIdWhichWillReturnModel(songEntity.getSinger().getId());
+        songDto.setSinger(singerMapper.mapSingerCreateDtoFromEntity(singer));
+
+        return songDto;
     }
 
     @Transactional

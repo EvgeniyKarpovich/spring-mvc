@@ -22,7 +22,7 @@ class SingerMapperTest {
     private static final String SINGER_NAME = "SINGERTestName";
     private static final String SONG_NAME = "SongTestName";
     private static final Song SONG = new Song(ID, SONG_NAME);
-    private static final List<Song> SONGS = Arrays.asList(SONG);
+    private static final List<Song> SONGS = List.of(SONG);
 
     @Mock
     private SongMapper songMapper;

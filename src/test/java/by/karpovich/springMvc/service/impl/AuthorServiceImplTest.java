@@ -2,10 +2,13 @@ package by.karpovich.springMvc.service.impl;
 
 import by.karpovich.springMvc.api.dto.AuthorCreateDto;
 import by.karpovich.springMvc.api.dto.AuthorDto;
+import by.karpovich.springMvc.api.dto.SongDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.AuthorMapper;
+import by.karpovich.springMvc.mapper.SongMapper;
 import by.karpovich.springMvc.model.Author;
+import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +31,8 @@ class AuthorServiceImplTest {
     private static final Long ID = 1L;
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private SongMapper songMapper;
     @Mock
     private AuthorMapper authorMapper;
     @InjectMocks
@@ -76,9 +81,11 @@ class AuthorServiceImplTest {
     void findById() {
         Author entity = mock(Author.class);
         AuthorDto dto = mock(AuthorDto.class);
+        List<SongDto> songDtos = new ArrayList<>();
 
         when(authorRepository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(authorMapper.mapFromEntity(any(Author.class))).thenReturn(dto);
+        when(songMapper.mapListDtoFromListEntity(anyList())).thenReturn(songDtos);
 
         AuthorDto result = authorService.findById(ID);
         assertNotNull(result);

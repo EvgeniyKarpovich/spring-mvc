@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, componentModel = "spring", uses = {SingerMapper.class, AuthorMapper.class})
 public interface SongMapper {
 
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "singer", ignore = true)
     @Mapping(target = "authors", ignore = true)
@@ -21,5 +22,7 @@ public interface SongMapper {
     @Mapping(target = "singer", ignore = true)
     SongDto mapFromEntity(Song entity);
 
+    @Mapping(target = "authors", ignore = true)
+    @Mapping(target = "singer", ignore = true)
     List<SongDto> mapListDtoFromListEntity(List<Song> entities);
 }

@@ -9,7 +9,8 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, componentModel = "spring", uses = SongMapper.class)
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR, componentModel = "spring")
 public interface AuthorMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -21,8 +22,9 @@ public interface AuthorMapper {
 
     AuthorCreateDto mapCreateDtoFromEntity(Author entity);
 
-    //    @Mapping(target = "songs")
+    @Mapping(target = "songs", ignore = true)
     List<AuthorCreateDto> mapListCreateDtoFromEntity(List<Author> authorsEntity);
 
+    @Mapping(target = "songs", ignore = true)
     List<AuthorDto> mapListDtoFromListEntity(List<Author> entities);
 }

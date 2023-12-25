@@ -26,10 +26,6 @@ class SongMapperTest {
     private static final Singer SINGER = new Singer(ID, SINGER_NAME);
 
     @Mock
-    private SingerServiceImpl singerService;
-    @Mock
-    private AuthorServiceImpl authorService;
-    @Mock
     private AuthorMapper authorMapper;
     @Mock
     private SingerMapper singerMapper;
@@ -48,7 +44,7 @@ class SongMapperTest {
     void mapFromEntity() {
         SongDto result = songMapper.mapFromEntity(generateSongEntity());
 
-        assertEquals(SONG_NAME, result.name());
+        assertEquals(SONG_NAME, result.getName());
     }
 
     @Test
@@ -59,31 +55,9 @@ class SongMapperTest {
         assertEquals(2, result.size());
 
         for (SongDto dto : result) {
-            assertEquals(SONG_NAME, dto.name());
+            assertEquals(SONG_NAME, dto.getName());
         }
     }
-
-//    @Test
-//    void setSingerAndAuthors() {
-//        when(singerService.findSingerByIdWhichWillReturnModel(ID)).thenReturn(SINGER);
-//
-////        Author author1 = new Author(1L, "Author1");
-////        Author author2 = new Author(2L, "Author2");
-////        when(authorService.findAuthorByIdWhichWillReturnModel(1L)).thenReturn(author1);
-////        when(authorService.findAuthorByIdWhichWillReturnModel(2L)).thenReturn(author2);
-//
-//        Song songEntity = new Song();
-////        songMapper.setSingerAndAuthors(songEntity, generateSongCreateDto());
-//
-//        assertEquals(SINGER, songEntity.getSinger());
-//        assertEquals(2, songEntity.getAuthors().size());
-//        assertEquals(author1, songEntity.getAuthors().get(0));
-//        assertEquals(author2, songEntity.getAuthors().get(1));
-//
-//        verify(singerService, times(1)).findSingerByIdWhichWillReturnModel(ID);
-//        verify(authorService, times(1)).findAuthorByIdWhichWillReturnModel(1L);
-//        verify(authorService, times(1)).findAuthorByIdWhichWillReturnModel(2L);
-//    }
 
     private Song generateSongEntity() {
         return new Song(ID, SONG_NAME, SINGER);

@@ -41,7 +41,7 @@ class AuthorMapperTest {
     void mapFromEntity() {
         AuthorDto result = authorMapper.mapFromEntity(generateAuthorEntity());
 
-        assertEquals(AUTHOR_NAME, result.name());
+        assertEquals(AUTHOR_NAME, result.getName());
     }
 
     @Test
@@ -51,17 +51,17 @@ class AuthorMapperTest {
         assertEquals(AUTHOR_NAME, result.name());
     }
 
-//    @Test
-//    void mapListCreateDtoFromEntity() {
-//        List<Author> entities = Arrays.asList(generateAuthorEntity(), generateAuthorEntity());
-//        List<AuthorCreateDto> result = authorMapper.mapListCreateDtoFromEntity(entities);
-//
-//        assertEquals(2, result.size());
-//
-//        for (AuthorCreateDto dto : result) {
-//            assertEquals(AUTHOR_NAME, dto.name());
-//        }
-//    }
+    @Test
+    void mapListCreateDtoFromEntity() {
+        List<Author> entities = Arrays.asList(generateAuthorEntity(), generateAuthorEntity());
+        List<AuthorCreateDto> result = authorMapper.mapListCreateDtoFromEntity(entities);
+
+        assertEquals(2, result.size());
+
+        for (AuthorCreateDto dto : result) {
+            assertEquals(AUTHOR_NAME, dto.name());
+        }
+    }
 
     @Test
     void mapListDtoFromListEntity() {
@@ -71,7 +71,7 @@ class AuthorMapperTest {
         assertEquals(2, result.size());
 
         for (AuthorDto dto : result) {
-            assertEquals(AUTHOR_NAME, dto.name());
+            assertEquals(AUTHOR_NAME, dto.getName());
         }
     }
 

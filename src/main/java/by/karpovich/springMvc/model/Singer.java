@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "singers")
 public class Singer extends BaseEntity {
-    @OneToMany(mappedBy = "singer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "singer", fetch = FetchType.EAGER)
     private List<Song> songs = new ArrayList<>();
 
     public Singer() {

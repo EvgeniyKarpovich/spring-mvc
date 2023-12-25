@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "authors")
 public class Author extends BaseEntity {
 
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER)
     private List<Song> songs = new ArrayList<>();
 
     public List<Song> getSongs() {

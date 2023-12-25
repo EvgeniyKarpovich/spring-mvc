@@ -5,12 +5,16 @@ import by.karpovich.springMvc.api.dto.AuthorDto;
 import by.karpovich.springMvc.exception.DuplicateException;
 import by.karpovich.springMvc.exception.NotFoundEntityException;
 import by.karpovich.springMvc.mapper.AuthorMapper;
+import by.karpovich.springMvc.mapper.SongMapper;
 import by.karpovich.springMvc.model.Author;
+import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.AuthorRepository;
+import by.karpovich.springMvc.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +23,15 @@ public class AuthorServiceImpl {
 
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
+    private final SongRepository songRepository;
+    private final SongMapper songMapper;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
+    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper, SongRepository songRepository, SongMapper songMapper) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
+        this.songRepository = songRepository;
+        this.songMapper = songMapper;
     }
 
     @Transactional
@@ -31,6 +39,7 @@ public class AuthorServiceImpl {
         validateAlreadyExists(authorCreateDto, null);
 
         Author authorEntity = authorMapper.mapFromDto(authorCreateDto);
+
         authorRepository.save(authorEntity);
     }
 
@@ -56,13 +65,28 @@ public class AuthorServiceImpl {
     public AuthorDto findById(Long authorId) {
         Author authorEntity = authorRepository.findById(authorId).orElseThrow(
                 () -> new NotFoundEntityException(String.format("Author with id = %s not found", authorId)));
-        return authorMapper.mapFromEntity(authorEntity);
+
+        AuthorDto authorDto = authorMapper.mapFromEntity(authorEntity);
+        authorDto.setSongs(songMapper.mapListDtoFromListEntity(getSongs(authorEntity)));
+
+        return authorDto;
+    }
+
+    private List<Song> getSongs(Author authorEntity) {
+        List<Song> songs = new ArrayList<>();
+
+        for (Song song : authorEntity.getSongs()) {
+            Song songEntity = songRepository.findById(song.getId())
+                    .orElseThrow(() -> new NotFoundEntityException(String.format("Song with id = %s  not found", song.getId())));
+            songs.add(songEntity);
+        }
+        return songs;
     }
 
     @Transactional
     public List<AuthorDto> findAll() {
-        List<Author> AuthorEntities = authorRepository.findAll();
-        return authorMapper.mapListDtoFromListEntity(AuthorEntities);
+        List<Author> authorEntities = authorRepository.findAll();
+        return authorMapper.mapListDtoFromListEntity(authorEntities);
     }
 
     @Transactional
