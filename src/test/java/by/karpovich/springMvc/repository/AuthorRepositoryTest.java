@@ -7,14 +7,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static by.karpovich.springMvc.config.PersistenceConfigForTest.container;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.testcontainers.shaded.org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {PersistenceConfigForTest.class, AuthorRepository.class})
@@ -48,6 +50,32 @@ class AuthorRepositoryTest {
     @Test
     void findById() {
         Author result = authorRepository.findById(1L).get();
+
+        assertEquals(result.getId(), 1L);
+        assertEquals(result.getName(), "Evgeniy Karpovich");
+    }
+
+
+    @Test
+    void deleteByIdWithConstraintViolation() {
+        Long authorId = 1L;
+
+        Optional<Author> authorOptional = authorRepository.findById(authorId);
+        assertTrue(authorOptional.isPresent());
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            authorRepository.deleteById(authorId);
+            authorRepository.flush();
+        });
+
+        Optional<Author> notDeletedAuthor = authorRepository.findById(authorId);
+        assertTrue(notDeletedAuthor.isPresent());
+    }
+
+
+    @Test
+    void findByName() {
+        Author result = authorRepository.findByName("Evgeniy Karpovich").get();
 
         assertEquals(result.getId(), 1L);
         assertEquals(result.getName(), "Evgeniy Karpovich");

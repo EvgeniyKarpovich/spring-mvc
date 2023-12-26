@@ -119,4 +119,13 @@ class SingerServiceImplTest {
 
         assertThrows(DuplicateException.class, () -> singerRepository.findByName("TEST NAME"));
     }
+
+    @Test
+    void whenFindByIdNotFound_ShouldThrowException() {
+        Long invalidId = 100L;
+        when(singerRepository.findById(invalidId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundEntityException.class, () ->
+                singerService.findById(invalidId));
+    }
 }

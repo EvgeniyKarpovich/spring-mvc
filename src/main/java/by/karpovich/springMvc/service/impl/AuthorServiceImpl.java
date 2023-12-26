@@ -69,7 +69,7 @@ public class AuthorServiceImpl {
         AuthorDto authorDto = authorMapper.mapFromEntity(authorEntity);
         authorDto.setSongs(songMapper.mapListDtoFromListEntity(getSongs(authorEntity)));
 
-        return authorDto;
+        return authorMapper.mapFromEntity(authorEntity);
     }
 
     private List<Song> getSongs(Author authorEntity) {

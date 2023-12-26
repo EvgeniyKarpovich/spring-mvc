@@ -10,6 +10,7 @@ import by.karpovich.springMvc.mapper.SongMapper;
 import by.karpovich.springMvc.model.Author;
 import by.karpovich.springMvc.model.Song;
 import by.karpovich.springMvc.repository.AuthorRepository;
+import by.karpovich.springMvc.repository.SongRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +33,8 @@ class AuthorServiceImplTest {
     private static final Long ID = 1L;
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private SongRepository songRepository;
     @Mock
     private SongMapper songMapper;
     @Mock
@@ -126,6 +130,15 @@ class AuthorServiceImplTest {
         when(authorRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundEntityException.class, () -> authorService.findById(ID));
+    }
+
+    @Test
+    public void whenFindAuthorByIdWithNonExistentIdThenThrowNotFoundEntityException() {
+
+        Long nonExistentId = 123L;
+        when(authorRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundEntityException.class, () -> authorService.findAuthorByIdWhichWillReturnModel(nonExistentId));
     }
 
     @Test

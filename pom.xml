@@ -193,10 +193,10 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>by/karpovich/exception/**</exclude>
-                        <exclude>by/karpovich/model/**</exclude>
-                        <exclude>by/karpovich/api/dto/**</exclude>
-                        <exclude>by/karpovich/config/**</exclude>
+                        <exclude>by/karpovich/springMvc/exception/**</exclude>
+                        <exclude>by/karpovich/springMvc/model/**</exclude>
+                        <exclude>by/karpovich/springMvc/api/dto/**</exclude>
+                        <exclude>by/karpovich/springMvc/config/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

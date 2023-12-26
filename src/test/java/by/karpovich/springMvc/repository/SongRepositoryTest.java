@@ -9,14 +9,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static by.karpovich.springMvc.config.PersistenceConfigForTest.container;
 import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {PersistenceConfigForTest.class, SingerRepository.class, AuthorRepository.class, SongRepository.class})
 class SongRepositoryTest {
@@ -41,6 +44,7 @@ class SongRepositoryTest {
     static void close() {
         container.stop();
     }
+
     @Test
     void findById() {
         Song result = songRepository.findById(1L).get();
